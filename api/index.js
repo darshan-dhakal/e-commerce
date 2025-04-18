@@ -15,9 +15,10 @@ const MONGOOSEDB_URL = process.env.MONGOOSEDB_URL
 
 mongoose
   .connect(MONGOOSEDB_URL)
-  .then(() => console.log('db connected'))
-  .then(err => {
-    err
+  .then(() => console.log('MongoDB Connected Successfully'))
+  .catch(err => {
+    console.error('MongoDB Connection Error:', err.message)
+    process.exit(1)
   })
 
 app.use(express.json())
