@@ -1,7 +1,10 @@
-import Layouts from "../layouts/Layouts";
-
+import Layout from "../layouts/Layouts";
+import ProductDescription from "../components/ProductDetail";
 function ProductDetail() {
-  return <Layouts>detail page</Layouts>;
+  return (
+    <Layout>
+      <ProductDescription></ProductDescription>
+    </Layout>
+  );
 }
-
 export default ProductDetail;
