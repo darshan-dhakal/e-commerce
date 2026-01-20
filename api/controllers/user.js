@@ -5,7 +5,7 @@ const handleRegisterUser = async (req, res) => {
   const { name, email, password } = req.body
   const existUser = await User.findOne({ email })
   if (existUser) {
-    res.status(201)
+    res.status(409)
     throw new Error('User already exist')
   } else {
     const user = await User.create({
@@ -13,6 +13,20 @@ const handleRegisterUser = async (req, res) => {
       email,
       password
     })
+
+    if (user) {
+      res.status(201).json({
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        token: generateToken(user._id),
+        createdAt: user.createdAt
+      })
+    } else {
+      res.status(400)
+      throw new Error('Invalid user data')
+    }
   }
 }
 

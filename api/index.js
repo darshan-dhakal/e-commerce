@@ -1,6 +1,7 @@
 const express = require('express')
 const dotenv = require('dotenv')
 const mongoose = require('mongoose')
+const cors = require('cors')
 const products = require('./data/products')
 const databaseSeeder = require('./databaseSeeder')
 const userRoute = require('./routes/user')
@@ -22,6 +23,8 @@ mongoose
   })
 
 app.use(express.json())
+// enable CORS for dev and external clients
+app.use(cors())
 //database seeder routes
 app.use('/api/seed', databaseSeeder)
 
@@ -32,6 +35,15 @@ app.use('/api/users', userRoute)
 app.use('/api/products', productRoute)
 
 app.use('/api/orders', orderRoute)
+
+// centralized error handler to return JSON errors
+app.use((err, req, res, next) => {
+  const statusCode =
+    res.statusCode && res.statusCode !== 200 ? res.statusCode : 500
+  res.status(statusCode).json({
+    message: err.message || 'Server Error'
+  })
+})
 
 app.listen(PORT, () => {
   console.log(`server listening on port ${PORT}`)
