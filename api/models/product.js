@@ -14,7 +14,15 @@ const productSchema = mongoose.Schema({
   rating: { type: Number, required: true, default: 0 },
   numReview: { type: Number, required: true, default: 0 },
   price: { type: Number, required: true, default: 0 },
-  countInStock: { type: Number, required: true, default: 0 }
+  countInStock: { type: Number, required: true, default: 0 },
+  category: { type: String, required: true, default: 'Uncategorized' },
+  discount: { type: Number, required: true, default: 0, min: 0 },
+  discountType: {
+    type: String,
+    required: true,
+    enum: ['percent', 'amount'],
+    default: 'percent'
+  }
 
   // reviews: [reviewSchema]
 })

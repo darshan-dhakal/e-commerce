@@ -1,8 +1,12 @@
 const productRoute = require('express').Router()
 const asyncHandler = require('express-async-handler')
+const { protect, adminOnly } = require('../middleware/auth')
 const {
   handleGetAllProducts,
-  handleGetProductById
+  handleGetProductById,
+  handleCreateProduct,
+  handleUpdateProduct,
+  handleDeleteProduct
 } = require('../controllers/product')
 
 productRoute.get('/', asyncHandler(handleGetAllProducts))
@@ -16,5 +20,16 @@ productRoute.get('/', asyncHandler(handleGetAllProducts))
 // )
 
 productRoute.get('/:id', asyncHandler(handleGetProductById))
+
+productRoute.post('/', protect, adminOnly, asyncHandler(handleCreateProduct))
+
+productRoute.put('/:id', protect, adminOnly, asyncHandler(handleUpdateProduct))
+
+productRoute.delete(
+  '/:id',
+  protect,
+  adminOnly,
+  asyncHandler(handleDeleteProduct)
+)
 
 module.exports = productRoute

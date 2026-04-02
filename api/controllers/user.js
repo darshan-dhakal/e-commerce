@@ -90,9 +90,25 @@ const handleGetUserById = async (req, res) => {
   }
 }
 
+const handleListUsers = async (req, res) => {
+  const users = await User.find({}).select('-password').sort({ _id: -1 })
+  res.json(users)
+}
+
+const handleGetUserDetail = async (req, res) => {
+  const user = await User.findById(req.params.id).select('-password')
+  if (!user) {
+    res.status(404)
+    throw new Error('User not found')
+  }
+  res.json(user)
+}
+
 module.exports = {
   handleRegisterUser,
   handleLoginUser,
   handleUpdateUser,
-  handleGetUserById
+  handleGetUserById,
+  handleListUsers,
+  handleGetUserDetail
 }

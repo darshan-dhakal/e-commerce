@@ -23,6 +23,7 @@ mongoose
   })
 
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 // enable CORS for dev and external clients
 app.use(cors())
 //database seeder routes

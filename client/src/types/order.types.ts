@@ -22,6 +22,20 @@ export interface PaymentResult {
   email_address: string;
 }
 
+export interface OrderNote {
+  note: string;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface RefundInfo {
+  status: "none" | "requested" | "approved" | "rejected" | "completed";
+  reason?: string;
+  amount?: number;
+  requestedAt?: string;
+  completedAt?: string;
+}
+
 export interface Order {
   _id: string;
   user: string;
@@ -36,6 +50,9 @@ export interface Order {
   paidAt?: Date;
   isDelivered: boolean;
   deliveredAt?: Date;
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  notes: OrderNote[];
+  refund: RefundInfo;
   createdAt: string;
   updatedAt: string;
 }

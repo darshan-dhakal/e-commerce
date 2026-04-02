@@ -1,13 +1,13 @@
 const userRoute = require('express').Router()
 const asyncHandler = require('express-async-handler')
-// const User = require('../models/user')
-const generateToken = require('../tokenGenerate')
-const protect = require('../middleware/auth')
+const { protect, adminOnly } = require('../middleware/auth')
 const {
   handleRegisterUser,
   handleLoginUser,
   handleUpdateUser,
-  handleGetUserById
+  handleGetUserById,
+  handleListUsers,
+  handleGetUserDetail
 } = require('../controllers/user')
 
 userRoute.post('/login', asyncHandler(handleLoginUser))
@@ -17,5 +17,9 @@ userRoute.post('/', asyncHandler(handleRegisterUser))
 userRoute.get('/profile', protect, asyncHandler(handleGetUserById))
 
 userRoute.put('/profile', protect, asyncHandler(handleUpdateUser))
+
+userRoute.get('/', protect, adminOnly, asyncHandler(handleListUsers))
+
+userRoute.get('/:id', protect, adminOnly, asyncHandler(handleGetUserDetail))
 
 module.exports = userRoute

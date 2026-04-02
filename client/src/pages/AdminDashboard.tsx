@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { orderAPI } from "../api/order.api";
+import { adminAPI } from "../api/admin.api";
 import { productAPI } from "../api/product.api";
 import { Order } from "../types/order.types";
 import { Product } from "../types/product.types";
@@ -9,18 +9,21 @@ export const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [ordersData, productsData] = await Promise.all([
-          orderAPI.getUserOrders(),
+        const [ordersData, productsData, usersData] = await Promise.all([
+          adminAPI.listAllOrders(),
           productAPI.getAllProducts(),
+          adminAPI.listUsers(),
         ]);
         setOrders(ordersData);
         setProducts(productsData);
+        setUsers(usersData);
       } catch (err: any) {
         setError(
           err.response?.data?.message || "Failed to load dashboard data",
@@ -62,7 +65,7 @@ export const AdminDashboard: React.FC = () => {
         )}
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-gray-600 text-sm font-semibold mb-2">
               Total Revenue
@@ -94,10 +97,17 @@ export const AdminDashboard: React.FC = () => {
               {totalProducts}
             </p>
           </div>
+
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-gray-600 text-sm font-semibold mb-2">
+              Total Users
+            </h3>
+            <p className="text-3xl font-bold text-indigo-600">{users.length}</p>
+          </div>
         </div>
 
         {/* Navigation */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <button
             onClick={() => navigate("/admin/products")}
             className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition text-left"
@@ -112,6 +122,14 @@ export const AdminDashboard: React.FC = () => {
           >
             <h3 className="text-xl font-bold text-gray-800">View Orders</h3>
             <p className="text-gray-600">Manage customer orders</p>
+          </button>
+
+          <button
+            onClick={() => navigate("/admin/users")}
+            className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition text-left"
+          >
+            <h3 className="text-xl font-bold text-gray-800">Manage Users</h3>
+            <p className="text-gray-600">View user details</p>
           </button>
         </div>
 

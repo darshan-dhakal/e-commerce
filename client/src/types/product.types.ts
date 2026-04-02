@@ -7,6 +7,9 @@ export interface Product {
   numReview: number;
   price: number;
   countInStock: number;
+  category: string;
+  discount: number;
+  discountType: "percent" | "amount";
 }
 
 export interface CartItem extends Product {
