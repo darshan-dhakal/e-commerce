@@ -6,6 +6,7 @@ import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
+  Route,
 } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -21,6 +22,8 @@ import { Checkout } from "./pages/Checkout";
 import { Orders, OrderDetail } from "./pages/Orders";
 import { AdminDashboard } from "./pages/AdminDashboard";
 import { AdminProducts } from "./pages/AdminProducts";
+import { AdminUsers } from "./pages/AdminUsers";
+import { AdminOrders } from "./pages/AdminOrders";
 
 const router = createBrowserRouter(
   [
@@ -78,6 +81,22 @@ const router = createBrowserRouter(
           element: (
             <ProtectedRoute adminOnly>
               <AdminProducts />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "admin/users",
+          element: (
+            <ProtectedRoute adminOnly>
+              <AdminUsers />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "admin/orders",
+          element: (
+            <ProtectedRoute adminOnly>
+              <AdminOrders />
             </ProtectedRoute>
           ),
         },
