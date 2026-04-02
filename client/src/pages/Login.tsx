@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useAuth } from "../hooks/useAuth";
+import { Button, Input } from "../components/ui";
+import { Mail, Lock, ArrowRight } from "lucide-react";
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -26,66 +29,139 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          Login
-        </h2>
+    <div className="min-h-screen bg-gradient-to-br from-primary-600 via-primary-500 to-secondary-600 flex items-center justify-center px-4 py-12">
+      {/* Background decorations */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-400 rounded-full opacity-20 blur-3xl" />
+        <div className="absolute -bottom-20 -left-40 w-96 h-96 bg-secondary-400 rounded-full opacity-20 blur-3xl" />
+      </div>
 
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="relative w-full max-w-md"
+      >
+        <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-10">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl mb-4">
+              <span className="text-white font-bold text-xl">E</span>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              Welcome Back
+            </h2>
+            <p className="text-gray-600">Sign in to access your account</p>
           </div>
-        )}
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 font-semibold mb-2">
-              Email
-            </label>
-            <input
+          {/* Error Message */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6"
+            >
+              {error}
+            </motion.div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <Input
+              label="Email Address"
               type="email"
+              icon={<Mail size={18} />}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              placeholder="you@example.com"
               required
             />
-          </div>
 
-          <div className="mb-6">
-            <label className="block text-gray-700 font-semibold mb-2">
-              Password
-            </label>
-            <input
+            <Input
+              label="Password"
               type="password"
+              icon={<Lock size={18} />}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              placeholder="••••••••"
               required
             />
+
+            {/* Remember me & Forgot password */}
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 border-gray-300 rounded focus:ring-primary-500"
+                />
+                <span className="text-sm text-gray-600">Remember me</span>
+              </label>
+              <a
+                href="#"
+                className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+              >
+                Forgot password?
+              </a>
+            </div>
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              size="lg"
+              isLoading={loading}
+              className="w-full flex items-center justify-center gap-2"
+            >
+              Sign In
+              <ArrowRight size={18} />
+            </Button>
+          </form>
+
+          {/* Divider */}
+          <div className="relative my-8">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">
+                Or continue with
+              </span>
+            </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700 transition disabled:opacity-50"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+          {/* Social Login */}
+          <div className="grid grid-cols-2 gap-4 mb-8">
+            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm">
+              Google
+            </button>
+            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm">
+              GitHub
+            </button>
+          </div>
 
-        <p className="text-center mt-6 text-gray-600">
-          Don't have an account?{" "}
-          <Link
-            to="/register"
-            className="text-blue-600 font-semibold hover:underline"
-          >
-            Register here
-          </Link>
+          {/* Sign Up Link */}
+          <p className="text-center text-gray-600">
+            Don't have an account?{" "}
+            <Link
+              to="/register"
+              className="text-primary-600 hover:text-primary-700 font-semibold"
+            >
+              Sign up
+            </Link>
+          </p>
+        </div>
+
+        {/* Footer */}
+        <p className="text-center text-white/80 text-sm mt-6">
+          By signing in, you agree to our{" "}
+          <a href="#" className="underline hover:text-white">
+            Terms of Service
+          </a>{" "}
+          and{" "}
+          <a href="#" className="underline hover:text-white">
+            Privacy Policy
+          </a>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 };
